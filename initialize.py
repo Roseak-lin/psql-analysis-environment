@@ -1,4 +1,5 @@
 import os
+import json
 import shutil
 import psycopg2
 from psycopg2 import sql
@@ -6,18 +7,14 @@ import subprocess
 import sys
 
 # --- CONFIGURATION ---
-ADMIN_DB = "postgres"  # Default administrative database
-TARGET_DB = "temp"     # The database we want to create and use
-DB_USER = "USERNAME_HERE"
-DB_PASS = "PASSWORD_HERE"
-DB_HOST = "localhost"  # Use 'localhost' or omit host for local socket
+ADMIN_DB = "postgres"
+TARGET_DB = "temp"
+DB_USER = None
+DB_PASS = None
+DB_HOST = "localhost" 
 
 FILE_DIR = "DB"
-# FILE_NAMES = [
-#     "name.basics.mini.tsv", "title.basics.mini.tsv", "title.crew.mini.tsv",
-#     "title.principals.mini.tsv", "title.ratings.mini.tsv"
-# ]
-FILE_NAMES = [
+NAMES = [
     "name.basics.tsv", "title.basics.tsv", "title.crew.tsv",
     "title.principals.tsv", "title.ratings.tsv"
 ]
@@ -79,45 +76,17 @@ TABLE_SCHEMAS = {
     }
 }
 
-# TABLE_SCHEMAS = {
-#     "name_basics_mini": {
-#         "nconst": "VARCHAR(10)", 
-#         "primaryname": "VARCHAR(255)", 
-#         "birthyear": "SMALLINT", 
-#         "deathyear": "SMALLINT", 
-#         "primaryprofession": "VARCHAR(255)", 
-#         "knownfortitles": "TEXT" 
-#     },
-#     "title_basics_mini": {
-#         "tconst": "VARCHAR(255)", 
-#         "titletype": "VARCHAR(50)",
-#         "primarytitle": "VARCHAR(255)",
-#         "originaltitle": "VARCHAR(255)",
-#         "isadult": "BOOLEAN",
-#         "startyear": "SMALLINT",
-#         "endyear": "SMALLINT",
-#         "runtimeminutes": "SMALLINT",
-#         "genres": "VARCHAR(255)"
-#     },
-#     "title_crew_mini": {
-#         "tconst": "VARCHAR(255)",
-#         "directors": "TEXT",
-#         "writers": "TEXT"
-#     },
-#     "title_principals_mini": {
-#         "tconst": "VARCHAR(255)",
-#         "ordering": "VARCHAR(10)",
-#         "nconst": "VARCHAR(255)", 
-#         "category": "VARCHAR(50)",
-#         "job": "VARCHAR(255)",
-#         "characters": "TEXT"
-#     },
-#     "title_ratings_mini": {
-#         "tconst": "VARCHAR(255)",
-#         "averagerating": "VARCHAR(10)",
-#         "numvotes": "VARCHAR(15)"
-#     },
-# }
+def initialize_db_credentials():
+    global DB_USER, DB_PASS
+    try:
+        with open('credentials.json', 'r') as f:
+            creds = json.load(f)
+            DB_USER = creds['database']['user']
+            DB_PASS = creds['database']['password']
+    except Exception as e:
+        print("Error loading database credentials from 'credentials.json'. Ensure the file exists and is properly formatted.")
+        print(e)
+        sys.exit(1)
 
 def run_decompression_script(script_name="decompress.sh"):
     # 1. Check if the script exists in the current folder
@@ -249,6 +218,7 @@ def create_tables_and_load_data():
     print("\nAll operations complete and committed.")
 
 if __name__ == "__main__":
+    initialize_db_credentials()
     run_decompression_script("decompress.sh")
     
     setup_database()
