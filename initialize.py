@@ -8,14 +8,15 @@ import sys
 
 # --- CONFIGURATION ---
 ADMIN_DB = "postgres"
-TARGET_DB = "temp"
+TARGET_DB = "imdb"
 DB_USER = None
 DB_PASS = None
 DB_HOST = "localhost" 
 
 FILE_DIR = "DB"
-NAMES = [
-    "name.basics.tsv", "title.basics.tsv", "title.crew.tsv",
+FILE_NAMES = [
+    "name.basics.tsv", "title.basics.tsv", "title.crew.tsv", "title.akas.tsv",
+    "title.episode.tsv",
     "title.principals.tsv", "title.ratings.tsv"
 ]
 
@@ -134,14 +135,20 @@ def setup_database():
         print(e)
         sys.exit(1)
 
-    # Check if 'temp' database exists
+    # Check if 'imdb' database exists
     admin_cur.execute(f"SELECT 1 FROM pg_database WHERE datname = '{TARGET_DB}'")
     if admin_cur.fetchone():
         print(f"Database '{TARGET_DB}' already exists.")
     else:
         print(f"Creating database '{TARGET_DB}'...")
         try:
-            admin_cur.execute(sql.SQL(f"CREATE DATABASE {TARGET_DB}"))
+            admin_cur.execute(sql.SQL(f"""
+                CREATE DATABASE {TARGET_DB} 
+                with ENCODING 'UTF8' 
+                LC_COLLATE = 'en_US.UTF-8'
+                LC_CTYPE = 'en_US.UTF-8'
+                TEMPLATE = template0;
+                """))
             print("Database created successfully.")
         except Exception as e:
             print(f"Could not create database. Check user privileges. Error: {e}")
