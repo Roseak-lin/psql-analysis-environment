@@ -10,6 +10,12 @@ Next, this project requires the `psycopg2` dependency, which can be installed by
 ```
 pip install psycopg2-binary
 ```
+
+Finally, before running the python setup script, open up the powershell (or some other command line program), and run the following
+```
+sed -i 's/\r$//' decompress.sh
+```
+This fixes the line endings in the decompression script so that it can be executed by bash (on Windows)
 ___
 
 ## Running Program
