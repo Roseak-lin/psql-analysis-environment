@@ -1,0 +1,26 @@
+Finalize Aggregate  (cost=244046.49..244046.50 rows=1 width=8) (actual time=1760.227..1761.272 rows=1.00 loops=1)
+  Output: count(*)
+  Buffers: shared hit=2028 read=177908
+  ->  Gather  (cost=244046.27..244046.48 rows=2 width=8) (actual time=1760.073..1761.261 rows=3.00 loops=1)
+        Output: (PARTIAL count(*))
+        Workers Planned: 2
+        Workers Launched: 2
+        Buffers: shared hit=2028 read=177908
+        ->  Partial Aggregate  (cost=243046.27..243046.28 rows=1 width=8) (actual time=1747.940..1747.940 rows=1.00 loops=3)
+              Output: PARTIAL count(*)
+              Buffers: shared hit=2028 read=177908
+              Worker 0:  actual time=1742.718..1742.719 rows=1.00 loops=1
+                Buffers: shared hit=698 read=59103
+              Worker 1:  actual time=1741.640..1741.640 rows=1.00 loops=1
+                Buffers: shared hit=576 read=59628
+              ->  Parallel Seq Scan on public.title_basics  (cost=0.00..230424.22 rows=5048822 width=0) (actual time=1.717..1634.925 rows=4037533.67 loops=3)
+                    Output: tconst, titletype, primarytitle, originaltitle, isadult, startyear, endyear, runtimeminutes, genres
+                    Buffers: shared hit=2028 read=177908
+                    Worker 0:  actual time=2.045..1630.145 rows=4026847.00 loops=1
+                      Buffers: shared hit=698 read=59103
+                    Worker 1:  actual time=1.402..1629.604 rows=4047359.00 loops=1
+                      Buffers: shared hit=576 read=59628
+Planning:
+  Buffers: shared hit=5
+Planning Time: 1.910 ms
+Execution Time: 1761.406 ms

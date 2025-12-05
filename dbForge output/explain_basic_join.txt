@@ -1,0 +1,14 @@
+HashAggregate  (cost=452975.77..452975.87 rows=10 width=17) (actual time=1590.864..1590.865 rows=10.00 loops=1)
+  Output: count(tconst), titletype
+  Group Key: title_basics.titletype
+  Batches: 1  Memory Usage: 32kB
+  Buffers: shared hit=769 read=179167
+  ->  Seq Scan on public.title_basics  (cost=0.00..452572.37 rows=80680 width=19) (actual time=27.993..1564.308 rows=249295.00 loops=1)
+        Output: tconst, titletype, primarytitle, originaltitle, isadult, startyear, endyear, runtimeminutes, genres
+        Filter: (title_basics.startyear = (((random() * '34'::double precision) + '1990'::double precision))::integer)
+        Rows Removed by Filter: 11863306
+        Buffers: shared hit=769 read=179167
+Planning:
+  Buffers: shared hit=16 dirtied=2
+Planning Time: 1.989 ms
+Execution Time: 1591.388 ms

@@ -1,0 +1,18 @@
+Gather  (cost=1000.00..256678.03 rows=97 width=84) (actual time=3.754..1404.046 rows=5.00 loops=1)
+  Output: tconst, titletype, primarytitle, originaltitle, isadult, startyear, endyear, runtimeminutes, genres
+  Workers Planned: 2
+  Workers Launched: 2
+  Buffers: shared hit=1145 read=178791
+  ->  Parallel Seq Scan on public.title_basics  (cost=0.00..255668.33 rows=40 width=84) (actual time=652.102..1397.675 rows=1.67 loops=3)
+        Output: tconst, titletype, primarytitle, originaltitle, isadult, startyear, endyear, runtimeminutes, genres
+        Filter: ((title_basics.originaltitle ~~ '%malice%'::text) AND ((title_basics.titletype)::text = 'short'::text))
+        Rows Removed by Filter: 4037532
+        Buffers: shared hit=1145 read=178791
+        Worker 0:  actual time=1395.002..1395.003 rows=0.00 loops=1
+          Buffers: shared hit=332 read=59296
+        Worker 1:  actual time=557.929..1395.390 rows=3.00 loops=1
+          Buffers: shared hit=398 read=59316
+Planning:
+  Buffers: shared hit=35
+Planning Time: 2.154 ms
+Execution Time: 1404.201 ms

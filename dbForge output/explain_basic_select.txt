@@ -1,0 +1,41 @@
+                      Buffers: shared hit=3384
+                      Buffers: shared hit=3405
+                    Buffers: shared hit=10288
+                    Filter: (tr.averagerating > '8'::double precision)
+                    Output: tr.averagerating, tr.tconst
+                    Rows Removed by Filter: 423705
+                    Worker 0:  actual time=0.283..160.749 rows=111974.00 loops=1
+                    Worker 1:  actual time=0.029..159.996 rows=112251.00 loops=1
+                Buffers: shared hit=286 read=59904
+                Buffers: shared hit=311 read=59360
+                Buffers: shared hit=3384
+                Buffers: shared hit=3405
+              ->  Parallel Seq Scan on public.title_ratings tr  (cost=0.00..18657.87 rows=139721 width=14) (actual time=0.284..163.853 rows=111966.33 loops=3)
+              Buckets: 524288  Batches: 1  Memory Usage: 19904kB
+              Buffers: shared hit=10288
+              Buffers: shared hit=863 read=179073
+              Output: tb.tconst, tb.titletype, tb.primarytitle, tb.originaltitle, tb.isadult, tb.startyear, tb.endyear, tb.runtimeminutes, tb.genres
+              Output: tr.averagerating, tr.tconst
+              Worker 0:  actual time=0.890..825.414 rows=4052758.00 loops=1
+              Worker 0:  actual time=182.705..182.706 rows=111974.00 loops=1
+              Worker 1:  actual time=0.714..835.482 rows=4016633.00 loops=1
+              Worker 1:  actual time=182.528..182.528 rows=112251.00 loops=1
+          Buffers: shared hit=3670 read=59904
+          Buffers: shared hit=3716 read=59360
+        ->  Parallel Hash  (cost=18657.87..18657.87 rows=139721 width=14) (actual time=186.180..186.180 rows=111966.33 loops=3)
+        ->  Parallel Seq Scan on public.title_basics tb  (cost=0.00..230424.22 rows=5048822 width=34) (actual time=0.662..827.497 rows=4037533.67 loops=3)
+        Buffers: shared hit=11151 read=179073
+        Hash Cond: ((tb.tconst)::text = (tr.tconst)::text)
+        Output: tb.primarytitle, tb.startyear, tr.averagerating
+        Worker 0:  actual time=184.933..1841.932 rows=111537.00 loops=1
+        Worker 1:  actual time=184.578..1841.682 rows=111966.00 loops=1
+  ->  Parallel Hash Join  (cost=20404.38..270343.85 rows=139721 width=28) (actual time=188.827..1842.340 rows=111966.33 loops=3)
+  Buffers: shared hit=11151 read=179073
+  Buffers: shared hit=124 dirtied=2
+  Output: tb.primarytitle, tb.startyear, tr.averagerating
+  Workers Launched: 2
+  Workers Planned: 2
+Execution Time: 1872.966 ms
+Gather  (cost=21404.38..304876.85 rows=335330 width=28) (actual time=199.906..1864.173 rows=335899.00 loops=1)
+Planning Time: 5.081 ms
+Planning:
