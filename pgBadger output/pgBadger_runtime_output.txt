@@ -1,0 +1,39 @@
+1	710ms	
+EXPLAIN ( ANALYZE, COSTS, VERBOSE, BUFFERS, TIMING, format TEXT ) SELECT COUNT(tconst), titletype FROM title_basics WHERE startyear = (random() * 34 + 1990)::integer GROUP BY titletype;
+[ Date: 2025-12-02 18:14:33 ]
+2	680ms	
+EXPLAIN ( ANALYZE, COSTS, VERBOSE, BUFFERS, TIMING, format TEXT ) SELECT e.seasonnumber, e.episodenumber, b.primarytitle, r.averagerating FROM title_episode e JOIN title_basics b ON e.tconst = b.tconst JOIN title_ratings r ON e.tconst = r.tconst WHERE e.parenttconst = 'tt0903747' ORDER BY seasonnumber, episodenumber;
+[ Date: 2025-12-02 18:14:35 ]
+3	668ms	
+EXPLAIN ( ANALYZE, COSTS, VERBOSE, BUFFERS, TIMING, format TEXT ) select tb.primarytitle, tb.startyear, tr.averagerating from title_ratings as tr join title_basics as tb on tb.tconst = tr.tconst where tr.averagerating > 8.0;
+[ Date: 2025-12-02 18:14:34 ]
+4	410ms	
+SELECT e.seasonnumber, e.episodenumber, b.primarytitle, r.averagerating FROM title_episode e JOIN title_basics b ON e.tconst = b.tconst JOIN title_ratings r ON e.tconst = r.tconst WHERE e.parenttconst = 'tt0903747' ORDER BY seasonnumber, episodenumber;
+[ Date: 2025-12-02 18:14:36 ]
+5	333ms	
+EXPLAIN ( ANALYZE, COSTS, VERBOSE, BUFFERS, TIMING, format TEXT ) select * from title_basics where titletype = 'short' and originaltitle like '%malice%';
+[ Date: 2025-12-02 18:14:34 ]
+6	242ms	
+EXPLAIN ( ANALYZE, COSTS, VERBOSE, BUFFERS, TIMING, format TEXT ) SELECT COUNT(*) FROM title_basics;
+[ Date: 2025-12-02 18:14:36 ]
+7	4ms	
+SHOW data_directory;
+[ Date: 2025-12-02 18:11:42 - Database: postgres - User: postgres - Application: psql ]
+8	0ms	
+BEGIN;
+[ Date: 2025-12-02 18:14:32 - Database: imdb - User: postgres ]
+9	0ms	
+BEGIN;
+[ Date: 2025-12-02 18:14:33 - Database: imdb - User: postgres ]
+10	0ms	
+BEGIN;
+[ Date: 2025-12-02 18:14:34 - Database: imdb - User: postgres ]
+11	0ms	
+BEGIN;
+[ Date: 2025-12-02 18:14:35 - Database: imdb - User: postgres ]
+12	0ms	
+BEGIN;
+[ Date: 2025-12-02 18:14:36 - Database: imdb - User: postgres ]
+13	0ms	
+BEGIN;
+[ Date: 2025-12-02 18:14:34 - Database: imdb - User: postgres ]
